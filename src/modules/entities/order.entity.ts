@@ -1,16 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
-export class Checkout {
+@Entity('orders')
+export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    orderId: string;
+    clientId: number;
 
     @Column()
-    userId: string;
+    amount: number;
 
-    @Column()
+    @Column({ default: 'pending' })
     status: string;
 }

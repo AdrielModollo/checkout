@@ -17,7 +17,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "tsc": "npx tsc",
+    "typeorm": "npx typeorm",
+    "typeorm:migration:reset": "npx typeorm migration:revert -d ./dist/ormconfig.js",
+    "typeorm:migration:generate": "npx tsc && npx typeorm migration:generate ./src/modules/migrations/CreateOrderAndPayment -d ./dist/ormconfig.js",
+    "typeorm:migration:run": "npx tsc && npx typeorm migration:run -d ./dist/ormconfig.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -28,6 +33,9 @@
     "@nestjs/terminus": "^10.2.3",
     "@nestjs/typeorm": "^10.0.2",
     "amqplib": "^0.10.5",
+    "dotenv": "^16.4.7",
+    "microservice-checkout": "file:",
+    "mysql": "^2.18.1",
     "mysql2": "^3.12.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -55,9 +63,10 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.1.3"
+    "typeorm-ts-node-commonjs": "^0.3.20",
+    "typescript": "^5.7.3"
   },
   "jest": {
     "moduleFileExtensions": [
