@@ -17,7 +17,7 @@ const AppDataSource = new DataSource({
         join(__dirname, '**/entities/*.entity.{ts,js}'),
     ],
     migrations: [
-        join(__dirname, 'src/modules/migrations/*.{ts,js}')
+        join(__dirname, 'src/app/migrations/*.{ts,js}')
     ],
     synchronize: false,
 });
