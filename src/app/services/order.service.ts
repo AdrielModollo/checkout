@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from 'src/app/entities/order.entity';
 import { RmqService } from 'src/app/config/rabbitMq/rabbitMq.service';
+import { logger } from '../communs/logger.winston';
 
 @Injectable()
 export class OrderService {
@@ -13,15 +14,19 @@ export class OrderService {
     ) { }
 
     async createOrder(clientId: number, amount: number, status: string): Promise<Order> {
-        const order = new Order();
-        order.clientId = clientId;
-        order.amount = amount;
-        order.status = status;
+        try {
+            const order = new Order();
+            order.clientId = clientId;
+            order.amount = amount;
+            order.status = status;
 
-        await this.orderRepository.save(order);
+            const savedOrder = await this.orderRepository.save(order);
+            logger.info(`Pedido criado com sucesso: ${JSON.stringify(savedOrder)}`);
+            await this.rmqService.sendOrderStatus(order.id, order.status);
 
-        await this.rmqService.sendOrderStatus(order.id, order.status);
-
-        return order;
+            return savedOrder;
+        } catch (error) {
+            logger.error(`Erro ao criar o pedido: ${error.message}`);
+        }
     }
 }
