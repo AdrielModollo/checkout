@@ -20,10 +20,10 @@ async function bootstrap() {
     app.useLogger(logger);
 
     app.useGlobalPipes(new ValidationPipe({
-        transform: true,           // Transforma automaticamente os dados para os tipos corretos
-        whitelist: true,           // Remove propriedades não esperadas
-        forbidNonWhitelisted: true, // Retorna erro se propriedades não esperadas forem enviadas
-        skipMissingProperties: false, // Garante que propriedades ausentes sejam validadas como obrigatórias
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        skipMissingProperties: false,
     }));
 
     app.enableCors();
