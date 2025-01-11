@@ -34,6 +34,10 @@ npm install
 Gere as migrações do banco de dados:
 
 ```bash
+npm run tsc
+```
+
+```bash
 npm run typeorm:migration:generate
 ```
 
