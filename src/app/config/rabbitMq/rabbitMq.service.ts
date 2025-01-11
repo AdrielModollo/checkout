@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import * as amqp from 'amqplib';
-import { logger } from 'src/app/communs/logger.winston';
+import { logger } from '../../communs/logger.winston';
 
 @Injectable()
 export class RmqService implements OnModuleInit, OnModuleDestroy {
@@ -30,7 +30,9 @@ export class RmqService implements OnModuleInit, OnModuleDestroy {
             if (retryCount < this.maxRetries) {
                 logger.error(`Tentando reconectar... Tentativa ${retryCount + 1} de ${this.maxRetries}`);
                 console.log(`Tentando reconectar... Tentativa ${retryCount + 1} de ${this.maxRetries}`);
-                setTimeout(() => this.connect(retryCount + 1), this.retryDelay);
+
+                await new Promise((resolve) => setTimeout(resolve, this.retryDelay));
+                await this.connect(retryCount + 1);
             } else {
                 logger.error('Máximo de tentativas de conexão com RabbitMQ atingido.');
                 console.error('Máximo de tentativas de conexão com RabbitMQ atingido.');

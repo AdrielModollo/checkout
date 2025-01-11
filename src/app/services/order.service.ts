@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from 'src/app/entities/order.entity';
-import { RmqService } from 'src/app/config/rabbitMq/rabbitMq.service';
+import { Order } from '../entities/order.entity';
+import { RmqService } from '../config/rabbitMq/rabbitMq.service';
 import { logger } from '../communs/logger.winston';
 
 @Injectable()
