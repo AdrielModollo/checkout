@@ -21,14 +21,16 @@
     "tsc": "npx tsc",
     "typeorm": "npx typeorm",
     "typeorm:migration:reset": "npx typeorm migration:revert -d ./dist/ormconfig.js",
-    "typeorm:migration:generate": "npx tsc && npx typeorm migration:generate ./src/modules/migrations/CreateOrderAndPayment -d ./dist/ormconfig.js",
+    "typeorm:migration:generate": "npx tsc && npx typeorm migration:generate ./src/app/migrations/CreateOrderAndPayment -d ./dist/ormconfig.js",
     "typeorm:migration:run": "npx tsc && npx typeorm migration:run -d ./dist/ormconfig.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/microservices": "^10.4.15",
+    "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^8.1.1",
     "@nestjs/terminus": "^10.2.3",
