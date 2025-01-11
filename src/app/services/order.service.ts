@@ -13,20 +13,20 @@ export class OrderService {
         private readonly rmqService: RmqService,
     ) { }
 
-    async createOrder(clientId: number, amount: number, status: string): Promise<Order> {
+    async createOrder(createOrderDto): Promise<Order> {
         try {
             const order = new Order();
-            order.clientId = clientId;
-            order.amount = amount;
-            order.status = status;
+            order.clientId = createOrderDto.clientId;
+            order.amount = createOrderDto.amount;
+            order.status = createOrderDto.status;
 
             const savedOrder = await this.orderRepository.save(order);
-            logger.info(`Pedido criado com sucesso: ${JSON.stringify(savedOrder)}`);
+            logger.info(`Order created successfully: ${JSON.stringify(savedOrder)}`);
             await this.rmqService.sendOrderStatus(order.id, order.status);
 
             return savedOrder;
         } catch (error) {
-            logger.error(`Erro ao criar o pedido: ${error.message}`);
+            logger.error(`Error creating order: ${error.message}`);
         }
     }
 }
