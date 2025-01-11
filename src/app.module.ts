@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CheckoutModule } from './modules/checkout.modules';
-import { RmqService } from './modules/config/rabbitMq/rabbitMq.service';
+import { CheckoutModule } from './app/modules/checkout.module';
+import { RmqService } from './app/config/rabbitMq/rabbitMq.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import AppDataSource from '../ormconfig';
-
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
@@ -15,5 +14,4 @@ import AppDataSource from '../ormconfig';
     ],
     providers: [RmqService],
 })
-
 export class AppModule { }
