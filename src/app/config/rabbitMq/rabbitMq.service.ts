@@ -40,7 +40,7 @@ export class RmqService implements OnModuleInit, OnModuleDestroy {
         }
     }
 
-    async sendOrderStatus(orderId: number, status: string): Promise<void> {
+    async sendOrderStatus(queueName: string, orderId: number, status: string): Promise<void> {
         if (!this.channel) {
             logger.error('Canal não está disponível para envio de mensagens.');
             console.error('Canal não está disponível para envio de mensagens.');
@@ -49,14 +49,42 @@ export class RmqService implements OnModuleInit, OnModuleDestroy {
 
         try {
             const message = JSON.stringify({ orderId, status });
-            this.channel.sendToQueue('checkout', Buffer.from(message));
-            logger.info(`Mensagem enviada para a fila 'checkout': ${message}`);
-            console.log(`Mensagem enviada para a fila 'checkout': ${message}`);
+
+            await this.channel.assertQueue(queueName, { durable: true });
+
+            this.channel.sendToQueue(queueName, Buffer.from(message));
+            logger.info(`Mensagem enviada para a fila '${queueName}': ${message}`);
+            console.log(`Mensagem enviada para a fila '${queueName}': ${message}`);
         } catch (error) {
-            logger.error(`Erro ao enviar mensagem para a fila: ${error.message}`);
-            console.error('Erro ao enviar mensagem para a fila:', error);
+            logger.error(`Erro ao enviar mensagem para a fila '${queueName}': ${error.message}`);
+            console.error(`Erro ao enviar mensagem para a fila '${queueName}':`, error);
         }
     }
+
+    async consumePaymentQueue(queueName: string, callback: (message: any) => Promise<void>): Promise<void> {
+        if (!this.channel) {
+            logger.error('Canal não está disponível para consumo de mensagens.');
+            console.error('Canal não está disponível para consumo de mensagens.');
+            return;
+        }
+
+        try {
+            await this.channel.consume(queueName, async (msg) => {
+                if (msg) {
+                    const messageContent = msg.content.toString();
+                    logger.info(`Mensagem recebida da fila '${queueName}': ${messageContent}`);
+
+                    await callback(messageContent);
+
+                    this.channel.ack(msg);
+                }
+            });
+        } catch (error) {
+            logger.error(`Erro ao consumir mensagens da fila '${queueName}': ${error.message}`);
+            console.error(`Erro ao consumir mensagens da fila '${queueName}':`, error);
+        }
+    }
+
 
     private async close(): Promise<void> {
         try {
