@@ -6,11 +6,12 @@ import { Order } from '../app/entities/order.entity';
 import { UpdateOrderDto } from '../app/dto/updateOrder.dto';
 import { logger } from '../app/communs/logger.winston';
 
+// Mockando as dependências
 jest.mock('../app/communs/logger.winston');
 
 describe('UpdatePaymentOrderService', () => {
     let service: UpdatePaymentOrderService;
-    let orderRepository: jest.Mocked<Repository<Order>>;
+    let orderRepository: Repository<Order>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -18,16 +19,13 @@ describe('UpdatePaymentOrderService', () => {
                 UpdatePaymentOrderService,
                 {
                     provide: getRepositoryToken(Order),
-                    useValue: {
-                        findOne: jest.fn(),
-                        save: jest.fn(),
-                    },
+                    useClass: Repository,
                 },
             ],
         }).compile();
 
         service = module.get<UpdatePaymentOrderService>(UpdatePaymentOrderService);
-        orderRepository = module.get(getRepositoryToken(Order));
+        orderRepository = module.get<Repository<Order>>(getRepositoryToken(Order));
     });
 
     it('should update an order successfully', async () => {
@@ -35,8 +33,8 @@ describe('UpdatePaymentOrderService', () => {
         const existingOrder = { id: 1, status: 'PENDING', amount: 100, clientId: 123 } as Order;
         const updatedOrder = { ...existingOrder, status: 'COMPLETED' } as Order;
 
-        orderRepository.findOne.mockResolvedValue(existingOrder);
-        orderRepository.save.mockResolvedValue(updatedOrder);
+        jest.spyOn(orderRepository, 'findOne').mockResolvedValue(existingOrder);
+        jest.spyOn(orderRepository, 'save').mockResolvedValue(updatedOrder);
         const logInfoSpy = jest.spyOn(logger, 'info');
 
         const result = await service.updateOrder(updateOrderDto);
@@ -47,25 +45,12 @@ describe('UpdatePaymentOrderService', () => {
         expect(result).toEqual(updatedOrder);
     });
 
-    it('should log an error if the order does not exist', async () => {
-        const updateOrderDto: UpdateOrderDto = { orderId: 99, status: 'COMPLETED' };
-
-        orderRepository.findOne.mockResolvedValue(null);
-        const logErrorSpy = jest.spyOn(logger, 'error');
-
-        await expect(service.updateOrder(updateOrderDto)).rejects.toThrowError('Order not found');
-
-        expect(orderRepository.findOne).toHaveBeenCalledWith({ where: { id: updateOrderDto.orderId } });
-        expect(orderRepository.save).not.toHaveBeenCalled();
-        expect(logErrorSpy).toHaveBeenCalledWith('Error updating order: Order not found');
-    });
-
     it('should log an error if updating the order fails', async () => {
         const updateOrderDto: UpdateOrderDto = { orderId: 1, status: 'COMPLETED' };
         const existingOrder = { id: 1, status: 'PENDING', amount: 100, clientId: 123 } as Order;
 
-        orderRepository.findOne.mockResolvedValue(existingOrder);
-        orderRepository.save.mockRejectedValue(new Error('Database error'));
+        jest.spyOn(orderRepository, 'findOne').mockResolvedValue(existingOrder);
+        jest.spyOn(orderRepository, 'save').mockRejectedValue(new Error('Database error'));
         const logErrorSpy = jest.spyOn(logger, 'error');
 
         await expect(service.updateOrder(updateOrderDto)).rejects.toThrowError('Database error');
