@@ -2,7 +2,7 @@ import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { OrderService } from '../services/order.service';
 import { Order } from 'src/app/entities/order.entity';
 import { AuthGuard } from '../services/auth.guard.service';
-import { CreateOrderDto } from '../dto/create-order.dto';
+import { CreateOrderDto } from '../dto/createOrder.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { OrderSwagger } from '../swagger/order.swagger';
 
