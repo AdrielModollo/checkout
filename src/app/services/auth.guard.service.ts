@@ -4,9 +4,7 @@ import { logger } from '../communs/logger.winston';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(
-        private readonly configService: ConfigService,
-    ) { }
+    constructor(private configService: ConfigService) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
