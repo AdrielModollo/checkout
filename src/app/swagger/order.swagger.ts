@@ -1,6 +1,6 @@
 import { ApiResponseOptions } from '@nestjs/swagger';
 import { Order } from '../entities/order.entity';
-import { CreateOrderDto } from '../dto/create-order.dto';
+import { CreateOrderDto } from '../dto/createOrder.dto';
 
 export class OrderSwagger {
     static createOrderApiBody: ApiResponseOptions = {
