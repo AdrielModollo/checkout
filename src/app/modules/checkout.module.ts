@@ -1,23 +1,17 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderService } from '../services/order.service';
-import { OrderController } from '../controllers/order.controller';
-import { Order } from '../entities/order.entity';
-import { RmqService } from '../config/rabbitMq/rabbitMq.service';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard } from '../services/auth.guard.service';
-import { ConfigModule } from '@nestjs/config';
+import { OrderModule } from './order.module';
+import { PaymentModule } from './payment.module';
+import { AuthModule } from './auth.module';
+import { RmqModule } from './rabbitMq.module';
+import { ConsumerAndSendQueueModule } from './consumerAndSendQueue.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
-        TypeOrmModule.forFeature([Order]),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET,
-            signOptions: { expiresIn: '1h' },
-        }),
+        OrderModule,
+        PaymentModule,
+        AuthModule,
+        RmqModule,
+        ConsumerAndSendQueueModule,
     ],
-    providers: [OrderService, RmqService, AuthGuard],
-    controllers: [OrderController],
 })
 export class CheckoutModule { }
