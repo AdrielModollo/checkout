@@ -87,7 +87,7 @@ Execute os testes de cobertura com o comando:
 npm run test:cov
 ```
 
-### 6. Instruções para uso de JWT eterno no teste
+### 7. Instruções para uso de JWT eterno no teste
 
 Para os testes, é necessário utilizar um JWT eterno (que nunca expira). Você pode:
 
@@ -122,14 +122,14 @@ Value: Bearer <seu_token_aqui>
 Observação:
 Se você estiver utilizando um JWT com expiração definida (mesmo que longa), certifique-se de que o token não tenha expirado antes de realizar os testes.
 
-### 7. Acessar a Documentação Swagger
+### 8. Acessar a Documentação Swagger
 A documentação da API pode ser acessada através de:
 
 ```bash
 http://localhost:3000/api
 ```
 
-### 8. Verificar a Fila RabbitMQ
+### 9. Verificar a Fila RabbitMQ
 Acesse a interface do RabbitMQ para visualizar as filas:
 
 ```bash
@@ -139,7 +139,7 @@ Senha: guest
 ```
 
 
-### Estrutura de Pastas
+### 10. Estrutura de Pastas
 
 - src/app/modules: Módulos do NestJS.
 - src/app/config: Configurações como RabbitMQ e autenticação.
