@@ -113,3 +113,4 @@ Senha: guest
 - src/app/services: Serviços para lógica de negócios.
 - src/app/dto: Objetos de transferência de dados (DTOs).
 - src/app/communs: Utilitários e loggers.
+- __tests__ : testes unitários
