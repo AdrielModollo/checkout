@@ -25,7 +25,6 @@ export class CreateOrderDto {
         example: 'pending',
         required: true,
     })
-    @IsNotEmpty({ message: 'Order status is required.' })
-    @IsString({ message: 'The order status must be a string.' })
+
     status: string;
 }
