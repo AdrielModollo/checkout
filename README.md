@@ -87,7 +87,7 @@ Execute os testes de cobertura com o comando:
 npm run test:cov
 ```
 
-### Instruções para uso de JWT eterno no teste
+### 6. Instruções para uso de JWT eterno no teste
 
 Para os testes, é necessário utilizar um JWT eterno (que nunca expira). Você pode:
 
