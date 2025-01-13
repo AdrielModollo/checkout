@@ -1,21 +1,23 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderController } from '../controllers/order.controller';
-import { OrderService } from '../services/order.service';
+import { CheckoutService } from '../services/checkout.service';
 import { Order } from '../entities/order.entity';
 import { AuthModule } from './auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { ConsumerAndSendQueueModule } from './consumerAndSendQueue.module';
+import { ConsumerQueueModule } from './consumer.queue.module';
+import { SendQueueModule } from './send.queue.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Order]),
         AuthModule,
         ConfigModule.forRoot(),
-        ConsumerAndSendQueueModule
+        SendQueueModule,
+        ConsumerQueueModule
     ],
     controllers: [OrderController],
-    providers: [OrderService],
-    exports: [OrderService],
+    providers: [CheckoutService],
+    exports: [CheckoutService],
 })
-export class OrderModule { }
+export class CheckoutModule { }
