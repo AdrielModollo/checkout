@@ -24,47 +24,40 @@ export class RmqService implements OnModuleInit, OnModuleDestroy {
             this.channel = await this.connection.createChannel();
             await this.channel.assertQueue('checkout');
         } catch (error) {
-            logger.error(`Erro ao conectar com o RabbitMQ: ${error.message}`);
-            console.error('Erro ao conectar com o RabbitMQ:', error);
+            logger.error(`Error connecting to RabbitMQ: ${error.message}`);
 
             if (retryCount < this.maxRetries) {
-                logger.error(`Tentando reconectar... Tentativa ${retryCount + 1} de ${this.maxRetries}`);
-                console.log(`Tentando reconectar... Tentativa ${retryCount + 1} de ${this.maxRetries}`);
+                logger.error(`Retrying connection... Attempt ${retryCount + 1} of ${this.maxRetries}`);
 
                 await new Promise((resolve) => setTimeout(resolve, this.retryDelay));
                 await this.connect(retryCount + 1);
             } else {
-                logger.error('Máximo de tentativas de conexão com RabbitMQ atingido.');
-                console.error('Máximo de tentativas de conexão com RabbitMQ atingido.');
+                logger.error('Maximum connection attempts to RabbitMQ reached.');
             }
         }
     }
 
-    async sendOrderStatus(queueName: string, orderId: number, status: string): Promise<void> {
+    async sendOrder(queueName: string, orderId: number, amount: number, status: string): Promise<void> {
         if (!this.channel) {
-            logger.error('Canal não está disponível para envio de mensagens.');
-            console.error('Canal não está disponível para envio de mensagens.');
+            logger.error('Channel is not available for sending messages.');
             return;
         }
 
         try {
-            const message = JSON.stringify({ orderId, status });
+            const message = JSON.stringify({ orderId, amount, status });
 
             await this.channel.assertQueue(queueName, { durable: true });
 
             this.channel.sendToQueue(queueName, Buffer.from(message));
-            logger.info(`Mensagem enviada para a fila '${queueName}': ${message}`);
-            console.log(`Mensagem enviada para a fila '${queueName}': ${message}`);
+            logger.info(`Message sent to the '${queueName}' queue: ${message}`);
         } catch (error) {
-            logger.error(`Erro ao enviar mensagem para a fila '${queueName}': ${error.message}`);
-            console.error(`Erro ao enviar mensagem para a fila '${queueName}':`, error);
+            logger.error(`Error sending message to the '${queueName}' queue: ${error.message}`);
         }
     }
 
     async consumePaymentQueue(queueName: string, callback: (message: any) => Promise<void>): Promise<void> {
         if (!this.channel) {
-            logger.error('Canal não está disponível para consumo de mensagens.');
-            console.error('Canal não está disponível para consumo de mensagens.');
+            logger.error('Channel is not available for consuming messages.');
             return;
         }
 
@@ -72,7 +65,7 @@ export class RmqService implements OnModuleInit, OnModuleDestroy {
             await this.channel.consume(queueName, async (msg) => {
                 if (msg) {
                     const messageContent = msg.content.toString();
-                    logger.info(`Mensagem recebida da fila '${queueName}': ${messageContent}`);
+                    logger.info(`Message received from the '${queueName}' queue: ${messageContent}`);
 
                     await callback(messageContent);
 
@@ -80,19 +73,16 @@ export class RmqService implements OnModuleInit, OnModuleDestroy {
                 }
             });
         } catch (error) {
-            logger.error(`Erro ao consumir mensagens da fila '${queueName}': ${error.message}`);
-            console.error(`Erro ao consumir mensagens da fila '${queueName}':`, error);
+            logger.error(`Error consuming messages from the '${queueName}' queue: ${error.message}`);
         }
     }
-
 
     private async close(): Promise<void> {
         try {
             await this.channel.close();
             await this.connection.close();
         } catch (error) {
-            logger.error(`Erro ao fechar a conexão RabbitMQ: ${error.message}`);
-            console.error('Erro ao fechar a conexão RabbitMQ:', error);
+            logger.error(`Error closing the RabbitMQ connection: ${error.message}`);
         }
     }
 }

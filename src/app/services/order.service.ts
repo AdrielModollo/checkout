@@ -1,34 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from '../entities/order.entity';
 import { logger } from '../communs/logger.winston';
-import { ConsumerAndSendQueueService } from './consumerAndSendQueue.service';
-import { CreateOrderDto } from '../dto/createOrder.dto';
+import { UpdateOrderDto } from '../dto/updateOrder.dto';
 
 @Injectable()
 export class OrderService {
     constructor(
         @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>,
-        private readonly consumerAndSendQueueService: ConsumerAndSendQueueService,
     ) { }
 
-    async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
+    async updateOrder(updateOrderDto: UpdateOrderDto): Promise<Order> {
         try {
-            const order = new Order();
-            order.clientId = createOrderDto.clientId;
-            order.amount = createOrderDto.amount;
-            order.status = createOrderDto.status;
+            const order = await this.orderRepository.findOne({ where: { id: updateOrderDto.orderId } });
 
-            const savedOrder = await this.orderRepository.save(order);
-            logger.info(`Order created successfully: ${JSON.stringify(savedOrder)}`);
+            if (!order) {
+                logger.error('Order not found:', updateOrderDto.orderId);
+                throw new NotFoundException('Order not found');
+            }
 
-            await this.consumerAndSendQueueService.sendOrderStatus(savedOrder.id, savedOrder.status);
-
-            return savedOrder;
+            order.status = updateOrderDto.status;
+            const updatedOrder = await this.orderRepository.save(order);
+            logger.info(`Order updated successfully: ${JSON.stringify(updatedOrder)}`);
+            return updatedOrder;
         } catch (error) {
-            logger.error(`Error creating order: ${error.message}`);
+            logger.error(`Error updating order: ${error.message}`);
             throw error;
         }
     }
