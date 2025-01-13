@@ -87,10 +87,6 @@ Execute os testes de cobertura com o comando:
 npm run test:cov
 ```
 
-### Variáveis de ambiente
-
-Copiar arquivos da pasta .env.test para .env e modificar conforme necessário
-
 ### Instruções para uso de JWT eterno no teste
 
 Para os testes, é necessário utilizar um JWT eterno (que nunca expira). Você pode:
