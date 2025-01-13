@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CheckoutModule } from './app/modules/checkout.module';
+import { CheckoutPaymentModule } from './app/modules/checkout.payment.module';
 import { RmqService } from './app/config/rabbitMq/rabbitMq.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import AppDataSource from '../ormconfig';
@@ -10,7 +10,7 @@ import AppDataSource from '../ormconfig';
                 ...AppDataSource.options,
             }),
         }),
-        CheckoutModule,
+        CheckoutPaymentModule,
     ],
     providers: [RmqService],
 })
