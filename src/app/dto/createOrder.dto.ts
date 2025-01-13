@@ -20,11 +20,5 @@ export class CreateOrderDto {
     @IsNumber({}, { message: 'The order value must be a number.' })
     amount: number;
 
-    @ApiProperty({
-        description: 'Order status',
-        example: 'pending',
-        required: true,
-    })
-
     status: string;
 }
