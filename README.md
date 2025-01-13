@@ -138,8 +138,27 @@ Usuário: guest
 Senha: guest
 ```
 
+### 10. Acessar Rotas
 
-### 10. Estrutura de Pastas
+A rota para criar um pedido de pagamento está disponível em:
+
+http://localhost:3000/checkout/order
+
+#### Requisição
+
+Para acessar a rota, é necessário incluir o token JWT no cabeçalho de **Authorization** no formato **Bearer**. Exemplo de uso do token JWT:
+
+
+#### Corpo da Requisição (JSON)
+
+```json
+{
+  "clientId": 1,
+  "amount": 300
+}
+```
+
+### 11. Estrutura de Pastas
 
 - src/app/modules: Módulos do NestJS.
 - src/app/config: Configurações como RabbitMQ e autenticação.
