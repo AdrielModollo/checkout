@@ -4,8 +4,9 @@ Este projeto utiliza o framework NestJS para criar uma API destinada ao gerencia
 
 A lógica principal do projeto é a validação de pagamentos:
 
-Pagamentos menores ou iguais a 500: serão aprovados automaticamente.
-Pagamentos acima de 500: serão marcados como falhos.
+- Pagamentos menores ou iguais a 500: serão aprovados automaticamente.
+- Pagamentos acima de 500: serão marcados como falhos.
+
 A seguir, encontram-se as instruções para configurar, executar e testar este projeto.
 
 ## Dependências utilizadas:
