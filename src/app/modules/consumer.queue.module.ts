@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PaymentModule } from './payment.module';
-import { OrderModule } from './order';
+import { OrderModule } from './order.module';
 import { RmqModule } from './rabbitMq.module';
 import { ConsumerQueueService } from '../services/consumerQueue.service';
 
