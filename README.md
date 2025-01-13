@@ -1,6 +1,12 @@
 # Projeto NestJS com RabbitMQ, MySQL e TypeORM
 
-Este projeto utiliza NestJS para criar uma API para gerenciamento de pedidos, RabbitMQ para filas de mensagens, MySQL como banco de dados e TypeORM para migrações e interações com o banco. Abaixo estão os passos para configuração, execução e testes do projeto.
+Este projeto utiliza o framework NestJS para criar uma API destinada ao gerenciamento de pedidos, integrando RabbitMQ para filas de mensagens, MySQL como banco de dados relacional, e TypeORM para gerenciar migrações e interações com o banco de dados.
+
+A lógica principal do projeto é a validação de pagamentos:
+
+Pagamentos menores ou iguais a 500: serão aprovados automaticamente.
+Pagamentos acima de 500: serão marcados como falhos.
+A seguir, encontram-se as instruções para configurar, executar e testar este projeto.
 
 ## Dependências utilizadas:
 
