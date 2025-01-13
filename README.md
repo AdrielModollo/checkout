@@ -87,6 +87,45 @@ Execute os testes de cobertura com o comando:
 npm run test:cov
 ```
 
+### Variáveis de ambiente
+
+Copiar arquivos da pasta .env.test para .env e modificar conforme necessário
+
+### Instruções para uso de JWT eterno no teste
+
+Para os testes, é necessário utilizar um JWT eterno (que nunca expira). Você pode:
+
+- Utilizar o JWT gerado no arquivo .env.test: Se já houver um JWT configurado no arquivo .env.test, você pode usá-lo diretamente.
+
+- Gerar um novo JWT: Caso precise de um novo JWT, você pode gerar um token de longa duração (eterno). Para isso, siga o processo de geração de JWT conforme necessário para a sua aplicação.
+
+Configuração na rota Swagger:
+
+Ao testar a API via Swagger, insira o token JWT no campo de autorização. O Swagger geralmente possui um campo chamado Authorization onde você deve fornecer o token no formato:
+
+```bash
+Bearer <seu_token_aqui>
+```
+
+Configuração no Postman ou outra ferramenta de teste:
+
+Ao realizar requisições no Postman ou em outra ferramenta de teste, adicione o JWT no cabeçalho da requisição, na seção Authorization. O formato correto também será:
+
+```bash
+Bearer <seu_token_aqui>
+```
+
+Exemplo de como preencher o campo no Postman:
+
+```bash
+Cabeçalho:
+Key: Authorization
+Value: Bearer <seu_token_aqui>
+```
+
+Observação:
+Se você estiver utilizando um JWT com expiração definida (mesmo que longa), certifique-se de que o token não tenha expirado antes de realizar os testes.
+
 ### 7. Acessar a Documentação Swagger
 A documentação da API pode ser acessada através de:
 
