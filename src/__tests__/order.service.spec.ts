@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UpdatePaymentOrderService } from '../app/services/updatePaymentOrder.service';
+import { OrderService } from '../app/services/order.service'; // Atualizando o caminho
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from '../app/entities/order.entity';
-import { UpdateOrderDto } from '../app/dto/updateOrder.dto';
-import { logger } from '../app/communs/logger.winston';
+import { Order } from '../app/entities/order.entity'; // Atualizando o caminho
+import { UpdateOrderDto } from '../app/dto/updateOrder.dto'; // Atualizando o caminho
+import { logger } from '../app/communs/logger.winston'; // Atualizando o caminho
 
-jest.mock('../app/communs/logger.winston');
+jest.mock('../app/communs/logger.winston'); // Mock do logger
 
-describe('UpdatePaymentOrderService', () => {
-    let service: UpdatePaymentOrderService;
+describe('OrderService', () => {
+    let service: OrderService;
     let orderRepository: jest.Mocked<Repository<Order>>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                UpdatePaymentOrderService,
+                OrderService,
                 {
                     provide: getRepositoryToken(Order),
                     useValue: {
@@ -26,7 +26,7 @@ describe('UpdatePaymentOrderService', () => {
             ],
         }).compile();
 
-        service = module.get<UpdatePaymentOrderService>(UpdatePaymentOrderService);
+        service = module.get<OrderService>(OrderService);
         orderRepository = module.get(getRepositoryToken(Order));
     });
 
